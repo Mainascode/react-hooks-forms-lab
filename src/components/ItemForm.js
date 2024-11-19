@@ -1,26 +1,48 @@
-import React from "react";
-import { v4 as uuid } from "uuid";
+import React, { useState } from 'react';
 
-function ItemForm(props) {
+const ItemForm = ({ onItemFormSubmit }) => {
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!name || !category) return; // Prevent submission if fields are empty.
+
+    const newItem = {
+      id: Date.now().toString(), // Simple unique id based on timestamp
+      name,
+      category,
+    };
+
+    onItemFormSubmit(newItem); // Call the callback to add the new item
+    setName('');
+    setCategory('');
+  };
+
   return (
-    <form className="NewItem">
-      <label>
-        Name:
-        <input type="text" name="name" />
-      </label>
-
-      <label>
-        Category:
-        <select name="category">
-          <option value="Produce">Produce</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-      </label>
-
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter item name"
+      />
+      
+      <label htmlFor="category">Category</label>
+      <input
+        id="category"
+        type="text"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        placeholder="Enter item category"
+      />
+      
       <button type="submit">Add to List</button>
     </form>
   );
-}
+};
 
 export default ItemForm;
